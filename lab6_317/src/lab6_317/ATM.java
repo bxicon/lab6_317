@@ -32,7 +32,7 @@ public class ATM {
 					savingAccount();
 					break;
 				case 3:
-					//utilityCompany();
+					utilityCompany();
 					break;
 				case 4:
 					System.out.println("Thank you for using the ATM, Goodbye!");
@@ -51,9 +51,8 @@ public class ATM {
 			System.out.println("1: Deposit: ");
 			System.out.println("2: Withdraw: ");
 			System.out.println("3: Transfer to Saving Account: ");
-			System.out.println("4: Pay Bill: ");
-			System.out.println("5: Check Balance: ");
-			System.out.println("6: Return to Account Selection");
+			System.out.println("4: Check Balance: ");
+			System.out.println("5: Return to Account Selection");
 			int choice = getIntInput();
 			switch(choice) {
 				case 1:
@@ -84,12 +83,9 @@ public class ATM {
 					
 					break;
 				case 4:
-					System.out.println("TODO");
-					break;
-				case 5:
 					System.out.println("Current Checking Balance: $" + user.getCheckingAccount().getBalance());
 					break;
-				case 6:
+				case 5:
 					System.out.println("Returning to Account Selection.");
 					return;
 				default:
@@ -137,6 +133,93 @@ public class ATM {
 				default:
 					System.out.println("Invalid selection. Please try again.");
 					
+			}
+		}
+	}
+	
+	private void utilityCompany() {
+		System.out.println("You have selected the Utility Company!");
+		
+		while (true) {
+			System.out.println("\nPlease choose an option: ");
+			System.out.println("1: Sign Up: ");
+			System.out.println("2: Log In: ");
+			System.out.println("3: Return to Account Selection");
+			int choice = getIntInput();
+			switch(choice) {
+				case 1:
+					System.out.println("Please enter a username for your utility account: ");
+					scanner.nextLine();
+					String username = scanner.nextLine();
+					System.out.println("Please enter a password for your utility account: ");
+					String password = scanner.nextLine();
+					
+					int accountNumber = uc.createAccount(username, password, user);
+					
+					if(accountNumber != -1) {
+						System.out.println("Utility account created successfully!");
+						System.out.println("Your account number is: " + String.format("%06d", accountNumber));
+					}
+					else
+						System.out.println("Failed to create utility account. Username may already be taken.");
+					
+					break;
+				case 2:
+					System.out.println("Please enter your utility account number or username: ");
+					scanner.nextLine();
+					String username1 = scanner.nextLine();
+					System.out.println("Please enter your utility account password:");
+				    String password1 = scanner.nextLine();
+				    
+				    UtilityAccount account = uc.login(username1, password1);
+				    
+				    if(account != null)
+				    	utilityAccount(account);
+				    else
+				    	System.out.println("Login failed. Please check your username/password or account number.");
+					
+					break;
+				case 3:
+					System.out.println("Returning to Account Selection.");
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
+			}
+		}
+	}
+	
+	private void utilityAccount(UtilityAccount account) {
+		System.out.println("Logged in successfully to utility account!");
+		
+		while (true) {
+			System.out.println("\nPlease choose an option: ");
+			System.out.println("1: Check Bill Payment History: ");
+			System.out.println("2: Check Next Bill Payment Amount & Date: ");
+			System.out.println("3: Pay Bill: ");
+			System.out.println("4: Return to Utility Company Registration");
+			int choice = getIntInput();
+			switch(choice) {
+				case 1:
+					System.out.println("Recent Bill Payments: " + account.getBillPaymentHistory());
+					break;
+				case 2:
+					System.out.println("Next Bill Amount: $" + account.getNextBillAmount());
+					System.out.println("Due Date: " + account.getNextBillDate());
+					break;
+				case 3:
+					System.out.println("Enter the amount to pay for your utility bill: ");
+					double amount = getDoubleInput();
+					if(account.payBill(amount))
+						System.out.println("Bill paid successfully!");
+					else
+						System.out.println("Bill payment failed.");
+						
+					break;
+				case 4:
+					System.out.println("Returning to Utility Company Registration.");
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
 			}
 		}
 	}

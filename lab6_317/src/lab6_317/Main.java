@@ -14,5 +14,7 @@ public class Main {
 		UtilityCompany uc = DataController.loadUtilityCompany();
 		ATM atm = new ATM(user, uc);
 		atm.start();
+		DataController.saveUser(user);
+		DataController.saveUtilityCompany(uc);
 	}
 }
