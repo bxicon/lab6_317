@@ -13,6 +13,7 @@ public class UtilityAccount{
 	private double nextBillAmount = 400; 
 	private String nextBillDate;
 	private User user;
+	//Used to format date correctly to M/dd/yyyy
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("M/dd/yyyy");
 	
 	public UtilityAccount(String username, String password, int accountNumber, User user) {
@@ -21,16 +22,21 @@ public class UtilityAccount{
 		this.accountNumber = accountNumber;
 		this.user = user;
 		this.billHistory = new LinkedList<>();
+		//Initializes nextBillDate to 7 days from today
 		updateNextBillDate();
 	}
 	
 	public boolean payBill(double amount) {
+		//If amount does not exceed the bill amount
 		if(amount <= nextBillAmount) {
+			//If the user can pay the bill from the Checking Side
 			if(user.getCheckingAccount().payBill(amount)) {
+				//Add amount to the bill history and truncate it to the most recent 3 transactions
 				billHistory.add(amount);
 				if(billHistory.size() > 3) {
 					billHistory.poll();
 				}
+				//Reduce the bill by how much was paid off
 				nextBillAmount = nextBillAmount - amount;
 				return true;
 			}
@@ -38,11 +44,14 @@ public class UtilityAccount{
 		return false;
 	}
 	
+	//Updates nextBillDate to be todays date + a week
 	private void updateNextBillDate() {
 		LocalDate today = LocalDate.now();
 		LocalDate nextBill = today.plusDays(7);
 		nextBillDate = nextBill.format(DATE_FORMATTER);
 	}
+	
+	//Getters
 	
 	public Queue<Double> getBillPaymentHistory(){
 		return new LinkedList<>(billHistory);

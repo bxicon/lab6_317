@@ -10,10 +10,14 @@ public class Main {
 		//UtilityCompany testUC = new UtilityCompany();
 		//DataController.saveUtilityCompany(testUC);
 		
+		//Loads user from json file
 		User user = DataController.loadUser();
+		//Loads uc from json file
 		UtilityCompany uc = DataController.loadUtilityCompany();
+		//Start the ATM with given user and uc
 		ATM atm = new ATM(user, uc);
 		atm.start();
+		//Save the updated user and uc to their json files
 		DataController.saveUser(user);
 		DataController.saveUtilityCompany(uc);
 	}
